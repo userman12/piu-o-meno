@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1, user-scalable=no">
+<title>Più o Meno — indovina il numero</title>
+<meta name="theme-color" content="#0d0b1a">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Più o Meno">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- HOME -->
+<section class="screen" id="s-home">
+  <div class="hero">
+    <div class="logo">🎯</div>
+    <h1 class="title">Più o Meno</h1>
+    <p class="tagline">Due giocatori, un telefono.<br>Chi si avvicina di più al numero giusto?</p>
+  </div>
+  <div class="stack">
+    <button class="btn btn-ghost hidden" id="btn-resume">Riprendi partita</button>
+    <button class="btn btn-primary" id="btn-new">Nuova partita</button>
+    <button class="btn btn-quiet" id="btn-help">Come si gioca</button>
+  </div>
+</section>
+
+<!-- SETUP -->
+<section class="screen" id="s-setup">
+  <header class="topbar">
+    <button class="icon-btn" data-back="s-home" aria-label="Indietro">←</button>
+    <span class="topbar-title">Nuova partita</span>
+    <span class="icon-btn-spacer"></span>
+  </header>
+  <div class="scrollarea">
+    <label class="field p1">
+      <span class="field-label">Giocatore 1</span>
+      <input type="text" id="name1" maxlength="14" placeholder="Nome" autocomplete="off" enterkeyhint="next">
+    </label>
+    <label class="field p2">
+      <span class="field-label">Giocatore 2</span>
+      <input type="text" id="name2" maxlength="14" placeholder="Nome" autocomplete="off" enterkeyhint="done">
+    </label>
+    <div class="field">
+      <span class="field-label">Numero di round</span>
+      <div class="chips" id="rounds"></div>
+    </div>
+  </div>
+  <div class="stack">
+    <button class="btn btn-primary" id="btn-start">Iniziamo</button>
+  </div>
+</section>
+
+<!-- PASSAGGIO TELEFONO -->
+<section class="screen screen-pass" id="s-pass">
+  <div class="pass-inner">
+    <div class="pass-emoji">📱</div>
+    <p class="pass-kicker">Passa il telefono a</p>
+    <h2 class="pass-name" id="pass-name">Anna</h2>
+    <p class="pass-hint" id="pass-hint">Nessuno sbirci!</p>
+  </div>
+  <div class="stack">
+    <button class="btn btn-primary" id="btn-pass-ok">Ci sono!</button>
+  </div>
+</section>
+
+<!-- STIMA -->
+<section class="screen" id="s-guess">
+  <header class="topbar">
+    <span class="badge" id="guess-round">Round 1/10</span>
+    <span class="badge" id="guess-cat">Natura</span>
+  </header>
+
+  <div class="question-wrap">
+    <p class="who" id="guess-who">Tocca a <b>Anna</b></p>
+    <h2 class="question" id="guess-q">Domanda</h2>
+  </div>
+
+  <div class="picker" id="picker">
+    <div class="picker-band"></div>
+    <div class="picker-scroll" id="pickerScroll" tabindex="0" role="slider"
+         aria-label="Scegli la tua stima" aria-valuetext="0"></div>
+  </div>
+  <p class="picker-unit" id="picker-unit">unità</p>
+
+  <div class="stepper">
+    <button class="step-btn" id="step-minus" aria-label="Diminuisci">−</button>
+    <div class="step-hint">scorri<br>o tocca</div>
+    <button class="step-btn" id="step-plus" aria-label="Aumenta">+</button>
+  </div>
+
+  <div class="stack">
+    <button class="btn btn-primary" id="btn-confirm">Conferma stima</button>
+  </div>
+</section>
+
+<!-- RIVELAZIONE -->
+<section class="screen" id="s-reveal">
+  <header class="topbar">
+    <span class="badge" id="reveal-round">Round 1/10</span>
+  </header>
+  <div class="scrollarea">
+    <p class="reveal-q" id="reveal-q">Domanda</p>
+    <div class="answer-card">
+      <span class="answer-kicker">La risposta è</span>
+      <strong class="answer-value" id="answer-value">0</strong>
+      <span class="answer-unit" id="answer-unit">unità</span>
+    </div>
+    <div class="results" id="results"></div>
+    <div class="scoreline" id="scoreline"></div>
+  </div>
+  <div class="stack">
+    <button class="btn btn-primary" id="btn-next">Prossimo round</button>
+  </div>
+</section>
+
+<!-- FINALE -->
+<section class="screen" id="s-end">
+  <div class="scrollarea end-area">
+    <div class="trophy" id="end-emoji">🏆</div>
+    <p class="end-kicker" id="end-kicker">Vince</p>
+    <h2 class="end-name" id="end-name">Anna</h2>
+    <div class="final-score" id="final-score"></div>
+  </div>
+  <div class="stack">
+    <button class="btn btn-primary" id="btn-rematch">Rivincita</button>
+    <button class="btn btn-quiet" id="btn-home">Torna alla home</button>
+  </div>
+</section>
+
+<dialog id="help">
+  <h3>Come si gioca</h3>
+  <ol>
+    <li>Scegliete i nomi e quanti round giocare.</li>
+    <li>A ogni round compare una domanda con una risposta numerica.</li>
+    <li>Il primo giocatore sceglie la sua stima con la rotella, conferma e passa il telefono.</li>
+    <li>Il secondo fa lo stesso, senza vedere la stima dell'altro.</li>
+    <li>L'app rivela la risposta: chi si è avvicinato di più prende un punto.</li>
+  </ol>
+  <p class="dim">Le stime sono numeri arrotondati: conta saper stimare, non azzeccare la cifra esatta.</p>
+  <button class="btn btn-primary" id="help-close">Ho capito</button>
+</dialog>
+
+<script src="questions.js"></script>
+<script src="scale.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
