@@ -68,23 +68,26 @@
 </section>
 
 <!-- STIMA -->
-<section class="screen" id="s-guess">
+<section class="screen screen-gauge" id="s-guess">
   <header class="topbar">
     <span class="badge" id="guess-round">Round 1/10</span>
     <span class="badge" id="guess-cat">Natura</span>
   </header>
 
-  <div class="question-wrap">
-    <p class="who" id="guess-who">Tocca a <b>Anna</b></p>
-    <h2 class="question" id="guess-q">Domanda</h2>
-  </div>
+  <p class="who" id="guess-who">Tocca a <b>Anna</b></p>
 
-  <div class="picker" id="picker">
-    <div class="picker-band"></div>
+  <div class="gauge" id="gauge">
+    <div class="gauge-ticks" aria-hidden="true"></div>
+    <div class="gauge-fill" id="gaugeFill">
+      <div class="gauge-readout">
+        <strong class="gauge-value" id="gauge-value">0</strong>
+        <span class="gauge-unit" id="gauge-unit">unità</span>
+      </div>
+      <p class="gauge-question" id="guess-q">Domanda</p>
+    </div>
     <div class="picker-scroll" id="pickerScroll" tabindex="0" role="slider"
          aria-label="Scegli la tua stima" aria-valuetext="0"></div>
   </div>
-  <p class="picker-unit" id="picker-unit">unità</p>
 
   <div class="stepper">
     <button class="step-btn" id="step-minus" aria-label="Diminuisci">−</button>

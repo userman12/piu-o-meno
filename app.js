@@ -6,46 +6,50 @@ const ROUND_CHOICES = [5, 10, 15];
 
 /* fmtScale / fmtExact / buildTicks arrivano da scale.js */
 
-/* ---------------- picker a rotella ---------------- */
+/* ---------------- gauge: scala a livello che si riempie ---------------- */
 
 const scroll = $('#pickerScroll');
-const unitEl = $('#picker-unit');
-let ticks = [], items = [], curIdx = 0, ITEM_H = 60, painted = [], rafPending = false, trailT;
+const unitEl = $('#gauge-unit');
+const valueEl = $('#gauge-value');
+const fillEl = $('#gaugeFill');
+const ITEM_H = 56; // altezza di ogni tacca invisibile: solo per lo scroll-snap, nessun rendering
+let ticks = [], itemCount = 0, curIdx = 0, rafPending = false, trailT;
 
-// ponytail: rende in DOM tutte le tacche (max ~220 nodi), niente virtualizzazione.
-// Se in futuro le scale superassero il migliaio di valori, virtualizzare la finestra visibile.
 function buildPicker(max, step, unit) {
   ticks = buildTicks(max, step);
+  itemCount = ticks.length;
   const frag = document.createDocumentFragment();
-  items = ticks.map(v => {
+  for (let i = 0; i < itemCount; i++) {
     const el = document.createElement('div');
-    el.className = 'pick';
-    el.textContent = fmtScale(v);
+    el.className = 'gauge-tick-spacer';
     frag.append(el);
-    return el;
-  });
+  }
   scroll.replaceChildren(frag);
   unitEl.textContent = unit;
-  painted = [];
-  ITEM_H = items[0].offsetHeight || 60;
   curIdx = -1;
-  setIndex(Math.floor(items.length / 2), false, true);
+  setIndex(Math.floor(itemCount / 2), false, true);
   paint();
 }
 
+// Testo lungo ("780 miliardi") non deve uscire dalla card: il font si restringe coi caratteri.
+function setValueText(text) {
+  valueEl.textContent = text;
+  valueEl.style.fontSize = text.length <= 3 ? '' /* usa il clamp() di default */
+    : `clamp(24px, ${Math.max(6, 15 - text.length * 0.55)}vw, 60px)`;
+}
+
 function paint() {
-  const c = scroll.scrollTop / ITEM_H;
-  const mid = Math.round(c);
-  for (const el of painted) { el.style.transform = ''; el.style.opacity = ''; }
-  painted = [];
-  for (let i = Math.max(0, mid - 4); i <= Math.min(items.length - 1, mid + 4); i++) {
-    const d = Math.abs(i - c);
-    items[i].style.transform = `scale(${Math.max(.55, 1 - d * .17)})`;
-    items[i].style.opacity = Math.max(.16, 1 - d * .28);
-    painted.push(items[i]);
+  const maxScroll = (itemCount - 1) * ITEM_H;
+  const frac = maxScroll > 0 ? Math.min(1, Math.max(0, scroll.scrollTop / maxScroll)) : 0;
+  fillEl.style.height = (frac * 100) + '%';
+
+  const idx = Math.min(itemCount - 1, Math.max(0, Math.round(scroll.scrollTop / ITEM_H)));
+  if (idx !== curIdx) {
+    curIdx = idx;
+    setValueText(fmtScale(ticks[curIdx]));
+    buzz();
+    announce();
   }
-  const idx = Math.min(items.length - 1, Math.max(0, mid));
-  if (idx !== curIdx) { curIdx = idx; buzz(); announce(); }
 }
 
 function announce() {
@@ -55,9 +59,15 @@ function announce() {
 const buzz = () => { try { navigator.vibrate?.(5); } catch {} };
 
 function setIndex(i, smooth, silent) {
-  i = Math.max(0, Math.min(items.length - 1, i));
-  if (i !== curIdx) { curIdx = i; if (!silent) buzz(); announce(); }
+  i = Math.max(0, Math.min(itemCount - 1, i));
+  if (i !== curIdx) {
+    curIdx = i;
+    setValueText(fmtScale(ticks[curIdx]));
+    if (!silent) buzz();
+    announce();
+  }
   scroll.scrollTo({ top: i * ITEM_H, behavior: smooth ? 'smooth' : 'auto' });
+  if (silent) paint(); // aggiorna subito il riempimento, senza aspettare l'evento scroll
 }
 
 scroll.addEventListener('scroll', () => {
@@ -155,8 +165,10 @@ function renderGuess() {
   $('#guess-cat').textContent = q.c;
   $('#guess-who').innerHTML = `Tocca a <b>${esc(S.names[S.turn])}</b>`;
   $('#guess-q').textContent = q.q;
+  $('#s-guess').classList.toggle('turn0', S.turn === 0);
+  $('#s-guess').classList.toggle('turn1', S.turn === 1);
   show('s-guess');
-  buildPicker(q.max, q.step, q.u); // dopo show(): serve il layout per misurare l'altezza
+  buildPicker(q.max, q.step, q.u);
 }
 
 function renderReveal() {
