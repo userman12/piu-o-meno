@@ -13,11 +13,15 @@ const unitEl = $('#gauge-unit');
 const valueEl = $('#gauge-value');
 const fillEl = $('#gaugeFill');
 const ITEM_H = 56; // altezza di ogni tacca invisibile: solo per lo scroll-snap, nessun rendering
-let ticks = [], itemCount = 0, curIdx = 0, rafPending = false, trailT;
+const EXT_BUFFER = 24; // tacche di margine sempre pronte oltre la posizione attuale, per non "sbattere" durante un fling veloce
+let ticks = [], itemCount = 0, curIdx = 0, curMax = 0, extStep = 0, extCount = 0, rafPending = false, trailT;
 
 function buildPicker(max, step, unit) {
   ticks = buildTicks(max, step);
   itemCount = ticks.length;
+  curMax = max;
+  extStep = step;
+  extCount = 0;
   const frag = document.createDocumentFragment();
   for (let i = 0; i < itemCount; i++) {
     const el = document.createElement('div');
@@ -31,6 +35,26 @@ function buildPicker(max, step, unit) {
   paint();
 }
 
+// Oltre il fondo scala "consigliato" (max) la rotella non ha un tetto: continua
+// a estendersi da sola, col passo che raddoppia ogni 12 tacche così restano
+// raggiungibili anche numeri enormi in poche swipe. `targetIdx` è la tacca più
+// lontana che serve avere pronta adesso; il margine EXT_BUFFER evita che un
+// fling veloce raggiunga il bordo prima che la nuova porzione sia stata aggiunta.
+function ensureExtended(targetIdx) {
+  if (itemCount > targetIdx + EXT_BUFFER) return;
+  const frag = document.createDocumentFragment();
+  while (itemCount <= targetIdx + EXT_BUFFER) {
+    if (extCount > 0 && extCount % 12 === 0) extStep *= 2;
+    ticks.push(ticks[ticks.length - 1] + extStep);
+    extCount++;
+    const el = document.createElement('div');
+    el.className = 'gauge-tick-spacer';
+    frag.append(el);
+    itemCount++;
+  }
+  scroll.append(frag);
+}
+
 // Testo lungo ("780 miliardi") non deve uscire dalla card: il font si restringe coi caratteri.
 function setValueText(text) {
   valueEl.textContent = text;
@@ -39,11 +63,19 @@ function setValueText(text) {
 }
 
 function paint() {
-  const maxScroll = (itemCount - 1) * ITEM_H;
-  const frac = maxScroll > 0 ? Math.min(1, Math.max(0, scroll.scrollTop / maxScroll)) : 0;
-  fillEl.style.height = (frac * 100) + '%';
+  const rawIdx = scroll.scrollTop / ITEM_H;
+  ensureExtended(Math.ceil(rawIdx));
 
-  const idx = Math.min(itemCount - 1, Math.max(0, Math.round(scroll.scrollTop / ITEM_H)));
+  // Riempimento proporzionale al VALORE (interpolato tra le due tacche più vicine),
+  // non alla posizione di scroll: oltre `max` la scala si allunga ma la card resta
+  // piena al 100%, segnalando che si è usciti dall'intervallo tipico.
+  const i0 = Math.max(0, Math.min(itemCount - 1, Math.floor(rawIdx)));
+  const i1 = Math.min(itemCount - 1, i0 + 1);
+  const t = Math.min(1, Math.max(0, rawIdx - i0));
+  const virtualValue = ticks[i0] + (ticks[i1] - ticks[i0]) * t;
+  fillEl.style.height = (Math.min(1, virtualValue / curMax) * 100) + '%';
+
+  const idx = Math.min(itemCount - 1, Math.max(0, Math.round(rawIdx)));
   if (idx !== curIdx) {
     curIdx = idx;
     setValueText(fmtScale(ticks[curIdx]));
@@ -59,7 +91,9 @@ function announce() {
 const buzz = () => { try { navigator.vibrate?.(5); } catch {} };
 
 function setIndex(i, smooth, silent) {
-  i = Math.max(0, Math.min(itemCount - 1, i));
+  i = Math.max(0, i);
+  ensureExtended(i);
+  i = Math.min(itemCount - 1, i);
   if (i !== curIdx) {
     curIdx = i;
     setValueText(fmtScale(ticks[curIdx]));
