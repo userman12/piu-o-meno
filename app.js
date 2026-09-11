@@ -9,12 +9,16 @@ const ROUND_CHOICES = [5, 10, 15];
 /* ---------------- gauge: scala a livello che si riempie ---------------- */
 
 const scroll = $('#pickerScroll');
+const gaugeEl = $('#gauge');
+const readoutEl = $('.gauge-readout');
+const questionEl = $('#guess-q');
 const unitEl = $('#gauge-unit');
 const valueEl = $('#gauge-value');
 const fillEl = $('#gaugeFill');
 const ITEM_H = 56; // altezza di ogni tacca invisibile: solo per lo scroll-snap, nessun rendering
 const EXT_BUFFER = 24; // tacche di margine sempre pronte oltre la posizione attuale, per non "sbattere" durante un fling veloce
 let ticks = [], itemCount = 0, curIdx = 0, curMax = 0, extStep = 0, extCount = 0, rafPending = false, trailT;
+let minFillPx = 0, maxFillPx = 0, fitCache = new Map();
 
 function buildPicker(max, step, unit) {
   ticks = buildTicks(max, step);
@@ -22,6 +26,7 @@ function buildPicker(max, step, unit) {
   curMax = max;
   extStep = step;
   extCount = 0;
+  fitCache = new Map();
   const frag = document.createDocumentFragment();
   for (let i = 0; i < itemCount; i++) {
     const el = document.createElement('div');
@@ -32,7 +37,17 @@ function buildPicker(max, step, unit) {
   unitEl.textContent = unit;
   curIdx = -1;
   setIndex(Math.floor(itemCount / 2), false, true);
+  measureFillBounds();
   paint();
+}
+
+// Il riempimento non va mai da 0 a 100%: sopra il bordo della card deve restare
+// spazio per il numero (che lo scavalca, altrimenti viene tagliato dal contenitore),
+// sotto deve starci tutta la domanda. Misuro entrambi una volta per round.
+function measureFillBounds() {
+  const gaugeH = gaugeEl.clientHeight;
+  minFillPx = questionEl.offsetTop + questionEl.offsetHeight + 20;
+  maxFillPx = Math.max(minFillPx + 1, gaugeH - (readoutEl.offsetHeight * 0.55 + 10));
 }
 
 // Oltre il fondo scala "consigliato" (max) la rotella non ha un tetto: continua
@@ -55,11 +70,24 @@ function ensureExtended(targetIdx) {
   scroll.append(frag);
 }
 
-// Testo lungo ("780 miliardi") non deve uscire dalla card: il font si restringe coi caratteri.
+// Testo lungo ("1,25 miliardi") non deve uscire di lato: misuro la larghezza reale
+// e rimpicciolisco solo quanto serve. Le cifre sono tabular-nums, quindi la
+// larghezza dipende dalla lunghezza del testo: basta una misura per lunghezza.
 function setValueText(text) {
   valueEl.textContent = text;
-  valueEl.style.fontSize = text.length <= 3 ? '' /* usa il clamp() di default */
-    : `clamp(24px, ${Math.max(6, 15 - text.length * 0.55)}vw, 60px)`;
+  const cached = fitCache.get(text.length);
+  if (cached !== undefined) { valueEl.style.fontSize = cached; return; }
+
+  valueEl.style.fontSize = '';
+  let size = '';
+  const avail = readoutEl.clientWidth;
+  const w = valueEl.scrollWidth;
+  if (avail && w > avail) {
+    const base = parseFloat(getComputedStyle(valueEl).fontSize);
+    size = Math.max(20, Math.floor(base * avail / w)) + 'px';
+    valueEl.style.fontSize = size;
+  }
+  fitCache.set(text.length, size);
 }
 
 function paint() {
@@ -73,7 +101,8 @@ function paint() {
   const i1 = Math.min(itemCount - 1, i0 + 1);
   const t = Math.min(1, Math.max(0, rawIdx - i0));
   const virtualValue = ticks[i0] + (ticks[i1] - ticks[i0]) * t;
-  fillEl.style.height = (Math.min(1, virtualValue / curMax) * 100) + '%';
+  const frac = Math.min(1, virtualValue / curMax);
+  fillEl.style.height = (minFillPx + (maxFillPx - minFillPx) * frac) + 'px';
 
   const idx = Math.min(itemCount - 1, Math.max(0, Math.round(rawIdx)));
   if (idx !== curIdx) {

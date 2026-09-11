@@ -20,7 +20,10 @@ function pickStep(max, target = 100) {
 const path = new URL('../questions.js', import.meta.url);
 const src = readFileSync(path, 'utf8');
 
-const out = src.replace(/max:\s*(\d+),/g, (m, maxStr) => `max: ${maxStr}, step: ${pickStep(Number(maxStr))},`);
+// Solo dove manca: `(?!\s*step:)` rende lo script idempotente, così si può
+// rilanciare dopo aver aggiunto nuove domande senza toccare quelle esistenti.
+const out = src.replace(/max:\s*(\d+),(?!\s*step:)/g,
+  (m, maxStr) => `max: ${maxStr}, step: ${pickStep(Number(maxStr))},`);
 
 writeFileSync(path, out);
 console.log('fatto');

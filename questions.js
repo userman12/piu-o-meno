@@ -149,4 +149,92 @@ const QUESTIONS = [
   { q: "Quanti chilogrammi di rifiuti produce un italiano in un anno?", a: 500, max: 2000, step: 20, u: "chilogrammi", c: "Scienza" },
   { q: "Quante cellule ci sono nel corpo umano?", a: 37000000000000, max: 100000000000000, step: 1000000000000, u: "cellule", c: "Scienza" },
   { q: "Quante gocce d'acqua ci sono in un litro?", a: 20000, max: 100000, step: 1000, u: "gocce", c: "Scienza" },
+
+  // Curiosità
+  { q: "Quante caselle ha una scacchiera?", a: 64, max: 200, step: 2, u: "caselle", c: "Curiosità" },
+  { q: "Quante carte ci sono in un mazzo di carte francesi, jolly compresi?", a: 54, max: 200, step: 2, u: "carte", c: "Curiosità" },
+  { q: "Quanti anelli ci sono sulla bandiera olimpica?", a: 5, max: 20, step: 1, u: "anelli", c: "Curiosità" },
+  { q: "Quante lettere ha l'alfabeto italiano?", a: 21, max: 60, step: 1, u: "lettere", c: "Curiosità" },
+  { q: "Quante lettere ha l'alfabeto russo?", a: 33, max: 100, step: 1, u: "lettere", c: "Curiosità" },
+  { q: "Quanti caratteri compongono l'hiragana giapponese?", a: 46, max: 200, step: 2, u: "caratteri", c: "Curiosità" },
+  { q: "Quanti tasti neri ha un pianoforte?", a: 36, max: 150, step: 2, u: "tasti", c: "Curiosità" },
+  { q: "Quante corde ha un'arpa da concerto?", a: 47, max: 200, step: 2, u: "corde", c: "Curiosità" },
+  { q: "Quanti strumenti compongono in media un'orchestra sinfonica?", a: 80, max: 300, step: 5, u: "strumenti", c: "Curiosità" },
+  { q: "Quante volte sbatte le palpebre una persona in un minuto?", a: 17, max: 100, step: 1, u: "volte", c: "Curiosità" },
+  { q: "Quanti sogni fa in media una persona ogni notte?", a: 5, max: 30, step: 1, u: "sogni", c: "Curiosità" },
+  { q: "Quanti anni passa dormendo una persona nell'arco della vita?", a: 26, max: 100, step: 1, u: "anni", c: "Curiosità" },
+  { q: "Quante parole al minuto legge in media una persona?", a: 250, max: 1000, step: 10, u: "parole", c: "Curiosità" },
+  { q: "Quante parole conosce in media un adulto italiano?", a: 30000, max: 150000, step: 2000, u: "parole", c: "Curiosità" },
+  { q: "Quanti litri d'acqua servono per riempire una vasca da bagno?", a: 150, max: 600, step: 5, u: "litri", c: "Curiosità" },
+  { q: "Quanti bulloni tengono insieme la Torre Eiffel?", a: 2500000, max: 10000000, step: 100000, u: "bulloni", c: "Curiosità" },
+
+  // Geografia
+  { q: "Quante regioni ha l'Italia?", a: 20, max: 60, step: 1, u: "regioni", c: "Geografia" },
+  { q: "Quante province ha l'Italia?", a: 107, max: 400, step: 5, u: "province", c: "Geografia" },
+  { q: "Quanti siti Patrimonio dell'Umanità UNESCO ci sono in Italia?", a: 60, max: 200, step: 2, u: "siti", c: "Geografia" },
+  { q: "Quanti chilometri è lungo il Canale di Suez?", a: 193, max: 600, step: 5, u: "chilometri", c: "Geografia" },
+  { q: "Quanti ettari misura la Città del Vaticano?", a: 44, max: 200, step: 2, u: "ettari", c: "Geografia" },
+  { q: "Quanti abitanti ha la Città del Vaticano?", a: 800, max: 5000, step: 50, u: "abitanti", c: "Geografia" },
+  { q: "Quanti chilometri di gallerie ha la metropolitana di Londra?", a: 402, max: 2000, step: 20, u: "chilometri", c: "Geografia" },
+  { q: "Quante stazioni ha la metropolitana di Milano?", a: 113, max: 500, step: 5, u: "stazioni", c: "Geografia" },
+  { q: "Quanti gradini ha la Scalinata di Trinità dei Monti a Roma?", a: 135, max: 500, step: 5, u: "gradini", c: "Geografia" },
+  { q: "Quanti gradini ha la Torre di Pisa?", a: 294, max: 1000, step: 10, u: "gradini", c: "Geografia" },
+  { q: "Quanti metri è alta la Statua della Libertà col piedistallo?", a: 93, max: 400, step: 5, u: "metri", c: "Geografia" },
+  { q: "Quanti gradini ci sono nella Statua della Libertà fino alla corona?", a: 354, max: 1500, step: 20, u: "gradini", c: "Geografia" },
+
+  // Storia
+  { q: "Quanti anni durò la Seconda Guerra Mondiale?", a: 6, max: 30, step: 1, u: "anni", c: "Storia" },
+  { q: "Quanti anni ci vollero per costruire il Duomo di Milano?", a: 579, max: 2000, step: 20, u: "anni", c: "Storia" },
+  { q: "Quante guglie ha il Duomo di Milano?", a: 135, max: 600, step: 5, u: "guglie", c: "Storia" },
+  { q: "Quanti anni visse Leonardo da Vinci?", a: 67, max: 150, step: 2, u: "anni", c: "Storia" },
+  { q: "Quanti anni dura il mandato del Presidente della Repubblica Italiana?", a: 7, max: 30, step: 1, u: "anni", c: "Storia" },
+  { q: "Quanti anni fa è comparso l'Homo sapiens?", a: 300000, max: 2000000, step: 20000, u: "anni", c: "Storia" },
+
+  // Cultura
+  { q: "Quanti episodi ha la serie \"Friends\"?", a: 236, max: 1000, step: 10, u: "episodi", c: "Cultura" },
+  { q: "Quanti Oscar ha vinto \"Il Signore degli Anelli - Il Ritorno del Re\"?", a: 11, max: 40, step: 1, u: "Oscar", c: "Cultura" },
+  { q: "Quanti paesi partecipano in media all'Eurovision?", a: 37, max: 150, step: 2, u: "paesi", c: "Cultura" },
+  { q: "Quante opere compose Mozart in tutta la sua vita?", a: 626, max: 3000, step: 50, u: "opere", c: "Cultura" },
+  { q: "Quanti anni aveva Mozart quando scrisse la sua prima sinfonia?", a: 8, max: 40, step: 1, u: "anni", c: "Cultura" },
+  { q: "Quanti visitatori entrano nella Cappella Sistina ogni giorno?", a: 20000, max: 100000, step: 1000, u: "visitatori", c: "Cultura" },
+
+  // Sport
+  { q: "Quanti giocatori compongono una squadra di rugby in campo?", a: 15, max: 60, step: 1, u: "giocatori", c: "Sport" },
+  { q: "Quanti round dura un incontro di boxe valido per il titolo mondiale?", a: 12, max: 50, step: 1, u: "round", c: "Sport" },
+  { q: "Quanti centimetri è alto il canestro nel basket?", a: 305, max: 1000, step: 10, u: "centimetri", c: "Sport" },
+  { q: "Quanti centimetri è alta la rete nella pallavolo maschile?", a: 243, max: 1000, step: 10, u: "centimetri", c: "Sport" },
+  { q: "Quanti grammi pesa un pallone da calcio?", a: 430, max: 2000, step: 20, u: "grammi", c: "Sport" },
+  { q: "Quanti grammi pesa una pallina da tennis?", a: 58, max: 300, step: 5, u: "grammi", c: "Sport" },
+  { q: "Quanti metri è lungo un giro del circuito di Monza?", a: 5793, max: 20000, step: 200, u: "metri", c: "Sport" },
+  { q: "Quanti Gran Premi ha vinto Michael Schumacher?", a: 91, max: 300, step: 5, u: "Gran Premi", c: "Sport" },
+  { q: "Quanti Mondiali di calcio ha vinto il Brasile?", a: 5, max: 20, step: 1, u: "Mondiali", c: "Sport" },
+
+  // Natura
+  { q: "Quanti occhi ha un ragno?", a: 8, max: 30, step: 1, u: "occhi", c: "Natura" },
+  { q: "Quanti denti ha la lingua di una lumaca?", a: 14000, max: 60000, step: 500, u: "denti", c: "Natura" },
+  { q: "Quante api vivono in un alveare?", a: 50000, max: 200000, step: 2000, u: "api", c: "Natura" },
+  { q: "Quanti chilometri volano le api in totale per produrre un chilo di miele?", a: 150000, max: 500000, step: 5000, u: "chilometri", c: "Natura" },
+  { q: "Quante specie di formiche esistono al mondo?", a: 14000, max: 60000, step: 500, u: "specie", c: "Natura" },
+  { q: "Quante piume ha un cigno?", a: 25000, max: 100000, step: 1000, u: "piume", c: "Natura" },
+  { q: "Quanti anni può vivere un pappagallo ara?", a: 60, max: 200, step: 2, u: "anni", c: "Natura" },
+  { q: "Quanti litri di latte produce una mucca in un giorno?", a: 28, max: 150, step: 2, u: "litri", c: "Natura" },
+  { q: "Quante uova depone una gallina in un anno?", a: 300, max: 1000, step: 10, u: "uova", c: "Natura" },
+  { q: "Quanti chilogrammi di bambù mangia un panda in un giorno?", a: 12, max: 100, step: 1, u: "chilogrammi", c: "Natura" },
+
+  // Scienza
+  { q: "Quanti gradi sotto zero è lo zero assoluto?", a: 273, max: 1000, step: 10, u: "gradi sotto zero", c: "Scienza" },
+  { q: "Quanti litri d'acqua stanno in un metro cubo?", a: 1000, max: 5000, step: 50, u: "litri", c: "Scienza" },
+  { q: "Quanti geni ha il genoma umano?", a: 20000, max: 100000, step: 1000, u: "geni", c: "Scienza" },
+  { q: "Quanti centimetri di DNA sono contenuti in una sola cellula umana?", a: 200, max: 1000, step: 10, u: "centimetri", c: "Scienza" },
+  { q: "Quanti batteri vivono nella bocca di una persona?", a: 20000000000, max: 100000000000, step: 1000000000, u: "batteri", c: "Scienza" },
+  { q: "Quanti anni ha la Terra?", a: 4540000000, max: 15000000000, step: 200000000, u: "anni", c: "Scienza" },
+  { q: "Quanti chilometri separano la Terra da Marte nel punto più vicino?", a: 55000000, max: 200000000, step: 2000000, u: "chilometri", c: "Spazio" },
+  { q: "Quanti chilogrammi di rocce lunari riportarono le missioni Apollo?", a: 382, max: 2000, step: 20, u: "chilogrammi", c: "Spazio" },
+  { q: "Quante persone lavorano alla NASA?", a: 18000, max: 100000, step: 1000, u: "persone", c: "Spazio" },
+
+  // Tecnologia
+  { q: "Quanti passeggeri può trasportare al massimo un Airbus A380?", a: 853, max: 3000, step: 50, u: "passeggeri", c: "Tecnologia" },
+  { q: "Quanti chilometri all'ora vola in crociera un aereo di linea?", a: 900, max: 3000, step: 50, u: "km/h", c: "Tecnologia" },
+  { q: "A quanti metri di altitudine vola in crociera un aereo di linea?", a: 11000, max: 50000, step: 500, u: "metri", c: "Tecnologia" },
+  { q: "Quanti chilometri percorre in media un'auto italiana in un anno?", a: 11000, max: 50000, step: 500, u: "chilometri", c: "Tecnologia" },
 ];

@@ -158,11 +158,11 @@ b { font-weight: 800; }
 .gauge-readout {
   position: absolute; left: 16px; right: 16px; bottom: 100%; transform: translateY(52%);
   display: flex; flex-direction: column; align-items: center; pointer-events: none;
-  overflow: hidden;
 }
 .gauge-value {
   font-size: clamp(40px, 13vw, 60px); font-weight: 900; letter-spacing: -.03em;
   font-variant-numeric: tabular-nums;
+  white-space: nowrap;
   color: #0a0714;
   /* contorno via text-shadow: -webkit-text-stroke sfugge all'overflow:hidden del
      contenitore in Chromium headless (bug noto), lo shadow no. */
